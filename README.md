@@ -11,14 +11,18 @@ Electrochemical impedance spectroscopy (EIS) is an experimental technique that i
 <div align='center'><strong>Figure 1. Schematic illustration of the GP-HT method.</strong></div>
 
 ## Dependencies
-'numpy'
-'scipy'
-'matplotlib'
-'pandas'
+
+`numpy`
+
+`scipy`
+
+`matplotlib`
+
+`pandas`
 
 ## Tutorials
 
-* **ex1_ZARC.ipynb**: this notebook shows how one can compute the GP-HT of a L+ZARC model.
+* **ex1_ZARC_L.ipynb**: this notebook shows how one can compute the GP-HT of a L+ZARC model.
 
 ## Citation
 
