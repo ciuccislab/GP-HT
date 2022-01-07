@@ -2,6 +2,46 @@ from math import pi, sqrt
 from scipy.special import dawsn 
 import numpy as np
 
+def is_PD(A):
+
+    try:
+        np.linalg.cholesky(A)
+        return True
+    except np.linalg.LinAlgError:
+        return False
+
+# Find the nearest positive-definite matrix
+def nearest_PD(A):
+    
+    # based on 
+    # N.J. Higham (1988) https://doi.org/10.1016/0024-3795(88)90223-6
+    # and 
+    # https://www.mathworks.com/matlabcentral/fileexchange/42885-nearestspd
+
+    B = (A + A.T)/2
+    _, Sigma_mat, V = np.linalg.svd(B)
+
+    H = np.dot(V.T, np.dot(np.diag(Sigma_mat), V))
+
+    A_nPD = (B + H) / 2
+    A_symm = (A_nPD + A_nPD.T) / 2
+
+    k = 1
+    I = np.eye(A_symm.shape[0])
+
+    while not is_PD(A_symm):
+        eps = np.spacing(np.linalg.norm(A_symm))
+
+        # MATLAB's 'chol' accepts matrices with eigenvalue = 0, numpy does not not. 
+        # So where the matlab implementation uses 'eps(mineig)', we use the above definition.
+
+        min_eig = min(0, np.min(np.real(np.linalg.eigvals(A_symm))))
+        A_symm += I * (-min_eig * k**2 + eps)
+        k += 1
+
+    return A_symm
+
+
 # Part 1 - DRT kernel
 # this function computes the DRT kernel 
 # according to the band-limited formulas given in the article
@@ -193,6 +233,13 @@ def NMLL_fct(theta, u, omega_vec, ker_opts_in, type_data='im'):
     K_im = mat_K(omega_vec, omega_vec, ker_opts, type_data)
     Sigma = (sigma_n**2)*np.eye(N_freqs)
     K_full = K_im + Sigma + (sigma_L**2)*np.outer(omega_vec, omega_vec)
+
+    # Cholesky-decompose K_full
+    # begin FC - added 
+    if not is_PD(K_full):
+        K_im_full = nearest_PD(K_full)
+    
+    # end FC - added
 
     # Cholesky-decompose K_full
     L = np.linalg.cholesky(K_full)
