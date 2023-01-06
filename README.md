@@ -59,7 +59,6 @@ Electrochemical impedance spectroscopy (EIS) is an experimental technique that i
 	month = {jan},
 	publisher = {Electrochimica Acta},
 	volume = {439},
-	number = {14},
 	pages = {141688},
 	author = {Baptiste Py, Adeleke Maradesa, Francesco Ciucci},
 	title = {Gaussian processes for the analysis of electrochemical impedance spectroscopy data: Prediction, filtering, and active learning},
