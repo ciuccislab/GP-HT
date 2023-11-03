@@ -224,7 +224,7 @@ def NMLL_fct(theta, u, omega_vec, ker_opts_in, type_data='im'):
 
     # begin FC - added 
     if not is_PD(K_full):
-        K_full_reg = nearest_PD(K_full)
+        K_full = nearest_PD(K_full)
 
     # end FC - added     
      
